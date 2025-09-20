@@ -1402,7 +1402,7 @@ select {
   width: 100%;
 }
 
-.form-label{
+.form-label {
   font-size: 0.75rem;
   line-height: 1rem;
   margin-bottom: 0.5rem;
@@ -31044,56 +31044,62 @@ select {
   animation: bounce 1s infinite;
 }
 
-.bg-theme1{
-  background-color:#23CF5F;
-  color:white;
+.bg-theme1 {
+  background-color: #23CF5F;
+  color: white;
 }
 
-.bg-theme1TextColor{
-  color:#003f7d;
+.bg-theme1TextColor {
+  color: #003f7d;
 }
 
-.bg-theme1 .trigger:hover,.bg-theme1 .trigger .icon:hover{
-  background-color:#C81B8E;
-  color:white;
+.bg-theme1 .trigger:hover,
+  .bg-theme1 .trigger .icon:hover {
+  background-color: #C81B8E;
+  color: white;
 }
 
-.bg-theme1 .trigger:focus,.bg-theme1 .trigger .icon:focus{
-  background-color:#23CF5F;
-  color:white;
+.bg-theme1 .trigger:focus,
+  .bg-theme1 .trigger .icon:focus {
+  background-color: #23CF5F;
+  color: white;
 }
 
-.bg-theme1 .trigger:active,.bg-theme1 .trigger .icon:active{
-  background-color:	#C81B8E;
-  color:white;
+.bg-theme1 .trigger:active,
+  .bg-theme1 .trigger .icon:active {
+  background-color: #C81B8E;
+  color: white;
 }
 
-.bg-theme1 .trigger:hover{
+.bg-theme1 .trigger:hover {
   cursor: pointer;
 }
 
-.bg-theme1 .icon{
-  color:white;
+.bg-theme1 .icon {
+  color: white;
 }
 
-.bg-theme2{
+.bg-theme2 {
   background: #23CF5F;
 }
 
-.borderBgTheme2:focus,.borderBgTheme2:hover{
+.borderBgTheme2:focus,
+  .borderBgTheme2:hover {
   border-color: #23CF5F !important;
 }
 
-.btnBgTheme2:focus,.btnBgTheme2:hover{
+.btnBgTheme2:focus,
+  .btnBgTheme2:hover {
   background-color: #C81B8E !important;
 }
 
-.sidebarx a:hover,.sidebarx a:focus{
-  background-color:#C81B8E;
-  color:white;
+.sidebarx a:hover,
+  .sidebarx a:focus {
+  background-color: #C81B8E;
+  color: white;
 }
 
-.tom-selects{
+.tom-selects {
   cursor: pointer !important;
   --tw-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
@@ -31101,24 +31107,28 @@ select {
      -moz-appearance: none !important;
           appearance: none !important;
   border-width: 1px !important;
-  width:100% !important;
+  width: 100% !important;
   --tw-text-opacity: 1 !important;
   color: rgba(55, 65, 81, var(--tw-text-opacity)) !important;
   line-height: 1.25 !important;
 }
 
-.tom-selects:focus{
+.tom-selects:focus {
   outline: 2px solid transparent !important;
   outline-offset: 2px !important;
 }
 
-.tom-selects:disabled{
+.tom-selects:disabled {
   --tw-bg-opacity: 0.4 !important;
 }
 
-.turbo-progress-bar{
+.turbo-progress-bar {
   height: 5px !important;
   background-color: orange !important;
+}
+
+[x-cloak] {
+  display: none important!;
 }
 
 @media (min-width: 640px) {
@@ -179250,4 +179260,3 @@ select {
     animation: bounce 1s infinite;
   }
 }
-

@@ -44,7 +44,8 @@ class AuthenticatedSessionController extends Controller
             ->first();
             // dd($user);
             if($user != null){
-                if($user->Status == 'InActive' or strtoupper($request->password) == 'Password@123'){
+                // if($user->Status == 'Active' or strtoupper($request->password) == 'Password@123'){
+                if($user->Status == 'Active' or $user->Status == 'InActive'){
                     if($user->Changed_Password == false){
                         return redirect('/forgot-password')->with('error','You need to reset your password before you can login');
                     }
@@ -52,7 +53,7 @@ class AuthenticatedSessionController extends Controller
                         return redirect()->back()->with('error','Staff No or password is incorrect');
                     }
                     else{
-                        //
+                        //  
                         $userSetup = $this->odataClient()->from(User::wsName())
                         ->where('Employee_No',$request->staffNo)
                         ->first();

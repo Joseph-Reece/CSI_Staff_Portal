@@ -18,10 +18,13 @@
                         <x-form-group>
                             <x-slot name="label">Laboratory Client No</x-slot>
                             <x-slot name="value">
-                                <x-select name="client_no" id="client_no" onchange="fetchClientName()" required>
+                                <x-select name="client_no" id="client_no" class="tom-selects">
                                     <option value="">--select--</option>
                                     @foreach($LabClients as $client)
-                                        <!-- <option value="{{ $client->no }}">{{ $client->no }}</option> -->
+                                        <option value="{{ $client->Client_No }}" data-name="{{ $client->client_name }}"
+                                            {{$action == 'edit' ? $client->Client_No == $SampleCollectionHeader->Client_No ? 'selected' : '' : old('client_no') }}>
+                                            {{ $client->Client_Name }}
+                                        </option>
                                     @endforeach
                                 </x-select>
                             </x-slot>
@@ -31,7 +34,8 @@
                         <x-form-group>
                             <x-slot name="label">Laboratory Client Name</x-slot>
                             <x-slot name="value">
-                                <x-input type="text" name="client_name" id="client_name" required />
+                                <x-input type="text" name="client_name" id="client_name"
+                                    value="{{ $SampleCollectionHeader->Client_Name }}" required />
                             </x-slot>
                         </x-form-group>
                     </x-grid-col>
@@ -40,13 +44,34 @@
                 {{-- Sample Type + Sample Code --}}
                 <x-grid>
                     <x-grid-col>
+                        <!-- <x-form-group>
+                            <x-slot name="label">Sample Type</x-slot>
+                            <x-slot name="value">
+                                <x-select name="sample_type" id="sample_type">
+                                    <option value="">--select--</option>
+                                    @foreach($AnalysisGroups as $type)
+                                        <option value="{{ $type->Analysis_Code }}">
+                                            {{ $type->Analysis_Group_Name }}
+                                        </option>
+                                    @endforeach
+                                </x-select>
+                            </x-slot>
+                        </x-form-group>
+
+
+                        <x-form-group>
+                            <x-slot name="label">Sample Code</x-slot>
+                            <x-slot name="value">
+                                <select id="sample_code" name="sample_code" placeholder="Select Sample Code"></select>
+                            </x-slot>
+                        </x-form-group> -->
                         <x-form-group>
                             <x-slot name="label">Sample Type</x-slot>
                             <x-slot name="value">
-                                <x-select name="sample_type" id="sample_type" onchange="filterSampleCodes()">
+                                <x-select name="sample_type" id="sample_type">
                                     <option value="">--select--</option>
                                     @foreach($AnalysisGroups as $type)
-                                        <!-- <option value="{{ $type->code }}">{{ $type->name }}</option> -->
+                                        <option value="{{ $type->Analysis_Code }}" {{$action == 'edit' ? $type->Analysis_Code == $SampleCollectionHeader->Analysis_Category_No ? 'selected' : '' : old('sample_type') }}>{{ $type->Analysis_Group_Name }}</option>
                                     @endforeach
                                 </x-select>
                             </x-slot>
@@ -58,16 +83,19 @@
                             <x-slot name="value">
                                 <x-select name="sample_code" id="sample_code">
                                     <option value="">--select--</option>
+                                    @foreach($AnalysisService as $service)
+                                        <option value="{{ $service->Service_Code }}" {{$action == 'edit' ? $service->Service_Code == $SampleCollectionHeader->Service_Code ? 'selected' : '' : old('sample_code') }}>{{ $service->Service_Name }}</option>
+                                    @endforeach
                                 </x-select>
                             </x-slot>
                         </x-form-group>
                     </x-grid-col>
-                    <x-grid-col>
-                        <x-form-group>
-                            <x-slot name="label">Samples Collected</x-slot>
-                            <x-slot name="value"><x-input disabled value="3" /> </x-slot>
-                        </x-form-group>
-                    </x-grid-col>
+                        <x-grid-col>
+                            <x-form-group>
+                                <x-slot name="label">Samples Collected</x-slot>
+                                <x-slot name="value"><x-input disabled value="{{ count($SamplingPoints) }}" /> </x-slot>
+                            </x-form-group>
+                        </x-grid-col>
                 </x-grid>
 
                 {{-- Parameters Section --}}
@@ -172,8 +200,115 @@
             @endif
         </x-slot>
     </x-panel>
-    @push('Scripts')
+    @push('scripts')
         <script>
+            new TomSelect("#client_no", {
+                create: true,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                }
+            });
+            new TomSelect("#sample_type", {
+                create: true,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                }
+            }); 
+        </script>
+        <!-- <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            // Initialize TomSelect for Sample Code
+                            const sampleCodeSelect = new TomSelect("#sample_code", {
+                                valueField: "code",
+                                labelField: "name",
+                                searchField: "name",
+                                placeholder: "Select Sample Code",
+                                load: function (query, callback) {
+                                    let type = document.getElementById("sample_type").value;
+                                    if (!type) return callback(); // stop if no type selected
+
+                                    fetch(`/sample-codes/${type}?q=${encodeURIComponent(query)}`)
+                                        .then(response => response.json())
+                                        .then(json => {
+                                            callback(json); // expects [{code:"X1", name:"Code X1"}]
+                                        })
+                                        .catch(() => {
+                                            callback();
+                                        });
+                                },
+                            });
+
+                            // Reset Sample Code when Sample Type changes
+                            document.getElementById("sample_type").addEventListener("change", function () {
+                                sampleCodeSelect.clear();
+                                sampleCodeSelect.clearOptions();
+                            });
+                        });
+                    </script> -->
+        <script>
+            $(document).ready(function () {
+                // Get the route with placeholder from Laravel
+                let sampleCodesUrl = @json(route('sampling.groupServices', ['type' => '__TYPE__']));
+
+                // Initialize TomSelect for Sample Code
+                var sampleCodeSelect = new TomSelect("#sample_code", {
+                    valueField: "Service_Code",
+                    labelField: "Service_Name",
+                    searchField: "Service_Name",
+                    placeholder: "Select Sample Code",
+                    load: function (query, callback) {
+                        var type = $("#sample_type").val();
+                        if (!type) return callback();
+
+                        // Replace placeholder with actual type
+                        let url = sampleCodesUrl.replace('__TYPE__', type);
+
+                        $.ajax({
+                            url: url,
+                            data: { q: query },
+                            dataType: "json",
+                            success: function (res) {
+                                callback(res);
+                            },
+                            error: function () {
+                                callback();
+                            }
+                        });
+                    }
+                });
+
+                // Auto-refresh sample codes when type changes
+                $("#sample_type").on("change", function () {
+                    sampleCodeSelect.clear();
+                    sampleCodeSelect.clearOptions();
+
+                    let type = $(this).val();
+                    if (type) {
+                        let url = sampleCodesUrl.replace('__TYPE__', type);
+                        $.ajax({
+                            url: url,
+                            dataType: "json",
+                            success: function (res) {
+                                sampleCodeSelect.addOptions(res);
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#client_no').on('change', function () {
+                    let clientName = $(this).find(':selected').data('name') || '';
+                    $('#client_name').val(clientName);
+                });
+
+                
+            });
+
 
         </script>
     @endpush

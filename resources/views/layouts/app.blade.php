@@ -12,11 +12,17 @@
         <!-- Fonts -->
         {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap"> --}}
         <!-- Styles -->
+        <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
+        <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <link rel="icon" href="/storage/general/logo.png" type="image/png">
+         {{-- selec2 cdn --}}
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
         {{-- <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script> --}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+         <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
+         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
         @livewireStyles
         @yield('styles')
     </head>
@@ -133,6 +139,7 @@
                 document.getElementById("frmG_Captcha").submit();
             }
         </script>
+
         @stack('scripts')
     </body>
 </html>

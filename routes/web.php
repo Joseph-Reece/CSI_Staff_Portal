@@ -22,6 +22,7 @@ use App\Http\Controllers\Staff\AppraisalController;
 use App\Http\Controllers\Staff\GeneralController as StaffGeneralController;
 //Farmer
 use App\Http\Controllers\Farmer\GeneralController as FarmerGeneralController;
+use Monolog\Handler\SamplingHandler;
 
 /*
 |--------------------------------------------------------------------------
@@ -206,11 +207,13 @@ Route::group(['prefix' => 'staff'], function(){
     });
     // Sample Collection
     Route::group(['prefix'=> 'sampling'], function(){
-        Route::get('/',[SampleCollectionController::class,'index']);
-        Route::get('/show/{collectionNo}',[SampleCollectionController::class, 'show']);
-        Route::post('/save',[SampleCollectionController::class, 'store']);
-        Route::put('/update',[SampleCollectionController::class, 'edit']);
+        Route::get('/',[SampleCollectionController::class,'index'])->name('sampling.index');
+        Route::get('/create',[SampleCollectionController::class,'create'])->name('sampling.create');
+        Route::get('/show/{collectionNo}',[SampleCollectionController::class, 'show'])->name('sampling.show');
+        Route::post('/save',[SampleCollectionController::class, 'store'])->name('sampling.store');
+        Route::put('/update',[SampleCollectionController::class, 'edit'])->name('sampling.update');
         Route::post('/delete',[SampleCollectionController::class,'delete']);
+        Route::get('/sample-codes/{type}', [SampleCollectionController::class,'getAnalysisServicesByCode'])->name('sampling.groupServices');
     });
 });
 Route::get('/logout',[GeneralController::class,'logout']);
