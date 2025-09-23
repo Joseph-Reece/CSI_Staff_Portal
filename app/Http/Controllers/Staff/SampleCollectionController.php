@@ -87,10 +87,10 @@ class SampleCollectionController extends Controller
         $AnalysisGroups = $this->odataClient()->from(AnalysisGroup::wsName())->get();
         $AnalysisService = $this->odataClient()->from(AnalysisService::wsName())->get();
         $SamplingPoints = $this->odataClient()->from(SamplingPoint::wsName())
-            ->where('Sample_Collection_No',  $id)
+            ->where('Sample_Collection_No', $id)
             ->get();
         $SampleCollectionHeader = $this->odataClient()->from(SampleCollection::wsName())
-            ->where('Sample_Collection_No',  $id)
+            ->where('Sample_Collection_No', $id)
             ->first();
         $action = 'edit';
         // dd($SampleCollectionHeader);
@@ -110,7 +110,7 @@ class SampleCollectionController extends Controller
         $LabClients = $this->odataClient()->from(LaboratoryClient::wsName())->get();
         $AnalysisGroups = $this->odataClient()->from(AnalysisGroup::wsName())->get();
         $SamplingPoints = $this->odataClient()->from(SamplingPoint::wsName())
-            ->where('Sample_Collection_No',  $id)
+            ->where('Sample_Collection_No', $id)
             ->get();
         // dd($SamplingPoints);
         $action = 'edit';
@@ -150,6 +150,115 @@ class SampleCollectionController extends Controller
             ->get();
         // dd($analysisServices);
         return response()->json($analysisServices);
+    }
+    public function UpdateParameterFindings(Request $request, $id)
+    {
+        // dd($request->all());
+
+        $this->validate(
+            $request,
+            [
+                'weather_conditions' => 'string',
+                'temperature' => 'numeric',
+                'sampling_area' => 'string',
+                'activities' => 'string',
+                'water_temperature' => 'numeric',
+                'type_of_sample' => 'string',
+                'sampling_method' => 'string',
+                'equipment_used' => 'string',
+                'sampling_depth' => 'string',
+                'container_type' => 'string',
+                'preservation_agent' => 'string',
+            ]
+        );
+
+
+        try {
+            $service = $this->MySoapClient(config('app.cuStaffPortal'));
+            $params = new \stdClass();
+
+            $params->collectionNo = $id;
+            $params->weatherConditions = $request->weather_conditions;
+            $params->temperature = $request->temperature;
+            $params->samplingArea = $request->sampling_area;
+            $params->activities = $request->activities;
+            $params->waterTemperature = $request->water_temperature;
+            $params->sampleType = $request->type_of_sample;
+            $params->samplingMethod = $request->sampling_method;
+            $params->equipmentUsed = $request->equipment_used;
+            $params->samplingDepth = $request->sampling_depth;
+            $params->containerType = $request->ContainerType;
+            $params->preservationAgentUsed = $request->preservation_agent;
+
+            // dd($params);
+            $result = $service->FnSaveParameterFindings($params);
+            return response()->json($result);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+    public function SaveSamplingPoints(Request $request, $id)
+    {
+        $this->validate(
+            $request,
+            [
+                'analysis_category' => 'string|required',
+                'service_code' => 'string|required',
+                'point_name' => 'string|required',
+                'sample_collected' => 'string|required',
+                'reason' => 'numeric',
+            ]
+        );
+        // dd($request->all());
+
+        try {
+            $service = $this->MySoapClient(config('app.cuStaffPortal'));
+            $params = new \stdClass();
+
+            $params->collectionNo = $id;
+            $params->analysisCategory = $request->analysis_category;
+            $params->serviceCode = $request->service_code;
+            $params->pointName = $request->point_name;
+            $params->sampleCollected = $request->sample_collected;
+            $params->reason = $request->Reason;
+            $params->recordLineNo = 0;
+            $params->myAction = 'create';
+
+            // dd($params);
+            $result = $service->FnSaveSamplingPoints($params);
+            return response()->json($result);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+    public function DeleteSamplingPoints(Request $request, $id)
+    {
+        $this->validate(
+            $request,
+            [
+                'CollectionNo' => 'required',
+            ]
+        );
+
+        try {
+            $service = $this->MySoapClient(config('app.cuStaffPortal'));
+            $params = new \stdClass();
+
+            $params->collectionNo = $request->CollectionNo;
+            $params->analysisCategory = '';
+            $params->serviceCode = '';
+            $params->pointName = '';
+            $params->sampleCollected = '';
+            $params->reason = '';
+            $params->recordLineNo = $id;
+            $params->myAction = 'delete';
+
+            $result = $service->FnSaveSamplingPoints($params);
+            return response()->json($result);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
 }

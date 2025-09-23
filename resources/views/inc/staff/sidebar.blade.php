@@ -75,6 +75,17 @@
                 </x-jet-dropdown-link> --}}
             </div>
         </div>
+        <!--Laboratory Services-->
+        <div class="pl-1 border-b border-t">
+            <span class="flex items-center gap-1"><x-heroicon-o-database/> Laboratory Services</span>
+            <div class="pl-4">
+                <x-jet-dropdown-link href="{{ route('sampling.index') }}" class="border-b border-l pl-1 flex items-center gap-1 {{request()->routeIs('sampling.index')? 'bg-theme2':''}}">
+                    <x-heroicon-o-shopping-cart/>
+                    Sample Collection
+                </x-jet-dropdown-link>
+                
+            </div>
+        </div>
         <!--approvals-->
         <div class="pl-1">
             <span class="flex items-center gap-1"><x-heroicon-o-document-duplicate/> Document Approvals</span>

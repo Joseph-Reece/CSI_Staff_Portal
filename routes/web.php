@@ -214,6 +214,9 @@ Route::group(['prefix' => 'staff'], function(){
         Route::put('/update',[SampleCollectionController::class, 'edit'])->name('sampling.update');
         Route::post('/delete',[SampleCollectionController::class,'delete']);
         Route::get('/sample-codes/{type}', [SampleCollectionController::class,'getAnalysisServicesByCode'])->name('sampling.groupServices');
+        Route::put('/update-paramenter-findings/{type}', [SampleCollectionController::class,'UpdateParameterFindings'])->name('sampling.updateparameters');
+        Route::put('/save-sampling-points/{collectionId}', [SampleCollectionController::class,'SaveSamplingPoints'])->name('sampling.samplingpoints');
+        Route::delete('/delete-sampling-points/{collectionId}', [SampleCollectionController::class,'DeleteSamplingPoints'])->name('sampling.deletepoint');
     });
 });
 Route::get('/logout',[GeneralController::class,'logout']);

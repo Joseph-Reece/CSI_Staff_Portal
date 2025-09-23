@@ -10,10 +10,10 @@
         <!-- Modal Content -->
         <div x-show="open" x-cloak x-transition class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative z-50">
 
-            <h2 class="text-lg font-bold mb-4">{{ $title }}</h2>
+            <h2  class="text-lg font-bold mb-4">{{ $title }}</h2>
 
             <!-- Slot for form/content -->
-            <div>
+            <div x-cloak  x-transition>
                 {{ $slot }}
             </div>
 

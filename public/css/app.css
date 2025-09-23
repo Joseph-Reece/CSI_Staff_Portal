@@ -31097,6 +31097,8 @@ select {
   .sidebarx a:focus {
   background-color: #C81B8E;
   color: white;
+  z-index: 2;
+  position: relative;
 }
 
 .tom-selects {
@@ -31111,6 +31113,8 @@ select {
   --tw-text-opacity: 1 !important;
   color: rgba(55, 65, 81, var(--tw-text-opacity)) !important;
   line-height: 1.25 !important;
+  z-index: 1;
+  position: absolute;
 }
 
 .tom-selects:focus {
