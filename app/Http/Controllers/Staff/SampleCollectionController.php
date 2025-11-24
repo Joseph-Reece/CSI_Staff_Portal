@@ -54,12 +54,19 @@ class SampleCollectionController extends Controller
         $this->validate(
             $request,
             [
-                'client_no' => 'required',
-                'client_name' => 'required',
+                'client_no' => 'string|nullable',
+                'client_name' => 'string|nullable',
                 'sample_type' => 'required',
                 'sample_code' => 'required',
+                'myAction' => 'required',
+                'sample_collection_no' => 'string|nullable'
             ]
         );
+
+        // dd($request->all());
+        // Add empty string if null
+
+
         try {
             $service = $this->MySoapClient(config('app.cuStaffPortal'));
             $params = new \stdClass();
@@ -70,8 +77,8 @@ class SampleCollectionController extends Controller
             $params->sampleType = $request->sample_type;
             $params->clientNo = $request->client_no;
             $params->clientName = $request->client_name;
-            $params->myAction = 'create';
-            $params->sampleCollectionNo = '';
+            $params->myAction = $request->myAction;
+            $params->sampleCollectionNo = $request->sample_collection_no;
             $result = $service->FnSampleCollection($params);
             // dd($result);
             return redirect()->route('sampling.index')->with('success', 'Save Successful');

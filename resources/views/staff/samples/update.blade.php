@@ -4,15 +4,13 @@
 
         <x-slot name="title">{{$action == 'create' ? 'New' : 'Edit'}} Sample Collection Form </x-slot>
         <x-slot name="body">
-            <form method="POST" action="{{ $action == 'create' ? route('sampling.store') : route('sampling.update')}}"
+            <form method="POST" action="{{ $action == 'create' ? route('sampling.store') : route('sampling.store')}}"
                 class="text-black w-full" data-turbo-frame="_top" enctype="multipart/form-data"
                 onsubmit="return confirm('Are you sure you want to submit sample collection?');">
                 @csrf
-                @if($action == 'edit')
-                    @method('PUT')
-                    <input id="collectionNo" type="hidden" name="collectionNo"
-                        value="{{isset($sampleCollection) ? $sampleCollection->Sample_Collection_No : ''}}" />
-                @endif
+                <input type="hidden" name="myAction" value="edit">
+                <input type="hidden" name="sample_collection_no"
+                    value="{{$SampleCollectionHeader->Sample_Collection_No}}">
                 <x-grid>
                     <x-grid-col>
                         <x-form-group>
@@ -79,7 +77,7 @@
 
                 <div class="p-2 flex justify-center mt-4">
                     <!-- <x-jet-button class="rounded-full bg-blue-800">Save & Continue</x-jet-button> -->
-                    <button type="button" @click="open = !open"
+                    <button type="submit"
                         class="px-2 py-1 text-sm rounded bg-green-500 text-white hover:bg-green-600">
                         Save Collection Header
                     </button>
@@ -250,35 +248,35 @@
             });
         </script>
         <!-- <script>
-                                                                                                                                document.addEventListener("DOMContentLoaded", function () {
-                                                                                                                                    // Initialize TomSelect for Sample Code
-                                                                                                                                    const sampleCodeSelect = new TomSelect("#sample_code", {
-                                                                                                                                        valueField: "code",
-                                                                                                                                        labelField: "name",
-                                                                                                                                        searchField: "name",
-                                                                                                                                        placeholder: "Select Sample Code",
-                                                                                                                                        load: function (query, callback) {
-                                                                                                                                            let type = document.getElementById("sample_type").value;
-                                                                                                                                            if (!type) return callback(); // stop if no type selected
+                                                                                                                                                            document.addEventListener("DOMContentLoaded", function () {
+                                                                                                                                                                // Initialize TomSelect for Sample Code
+                                                                                                                                                                const sampleCodeSelect = new TomSelect("#sample_code", {
+                                                                                                                                                                    valueField: "code",
+                                                                                                                                                                    labelField: "name",
+                                                                                                                                                                    searchField: "name",
+                                                                                                                                                                    placeholder: "Select Sample Code",
+                                                                                                                                                                    load: function (query, callback) {
+                                                                                                                                                                        let type = document.getElementById("sample_type").value;
+                                                                                                                                                                        if (!type) return callback(); // stop if no type selected
 
-                                                                                                                                            fetch(`/sample-codes/${type}?q=${encodeURIComponent(query)}`)
-                                                                                                                                                .then(response => response.json())
-                                                                                                                                                .then(json => {
-                                                                                                                                                    callback(json); // expects [{code:"X1", name:"Code X1"}]
-                                                                                                                                                })
-                                                                                                                                                .catch(() => {
-                                                                                                                                                    callback();
-                                                                                                                                                });
-                                                                                                                                        },
-                                                                                                                                    });
+                                                                                                                                                                        fetch(`/sample-codes/${type}?q=${encodeURIComponent(query)}`)
+                                                                                                                                                                            .then(response => response.json())
+                                                                                                                                                                            .then(json => {
+                                                                                                                                                                                callback(json); // expects [{code:"X1", name:"Code X1"}]
+                                                                                                                                                                            })
+                                                                                                                                                                            .catch(() => {
+                                                                                                                                                                                callback();
+                                                                                                                                                                            });
+                                                                                                                                                                    },
+                                                                                                                                                                });
 
-                                                                                                                                    // Reset Sample Code when Sample Type changes
-                                                                                                                                    document.getElementById("sample_type").addEventListener("change", function () {
-                                                                                                                                        sampleCodeSelect.clear();
-                                                                                                                                        sampleCodeSelect.clearOptions();
-                                                                                                                                    });
-                                                                                                                                });
-                                                                                                                            </script> -->
+                                                                                                                                                                // Reset Sample Code when Sample Type changes
+                                                                                                                                                                document.getElementById("sample_type").addEventListener("change", function () {
+                                                                                                                                                                    sampleCodeSelect.clear();
+                                                                                                                                                                    sampleCodeSelect.clearOptions();
+                                                                                                                                                                });
+                                                                                                                                                            });
+                                                                                                                                                        </script> -->
         <script>
             $(document).ready(function () {
                 // Get the route with placeholder from Laravel
@@ -421,13 +419,12 @@
                         type: 'PUT',
                         data: formData,
                         success: function (res) {
-                            alert(res.message || "Sampling point saved!");
                             $('#sampling_point_form')[0].reset();
-                            // Close modal
-                            $('.modal [x-data]').attr('open', false);
+                            //close Modal
+                            $('#addSamplingpoint').addClass('hidden');
 
                             // Reload table section dynamically
-                            $('#sampling-points-container').html(res.html);
+                            window.location.reload();
                         },
                         error: function (xhr) {
                             let errors = xhr.responseJSON?.errors;
@@ -444,27 +441,31 @@
                     });
                 });
                 $('button[id="saveSamplingPointBtn"]').on('click', function () {
-                    console.log('hereeee');
                     $('#sampling_point_form').trigger('submit');
                 });
 
-                $('button[id="deletesampling"').on('click', function () {
+                $('.deletesampling').on('click', function () {
                     let url = $(this).data('url');
                     let record = $(this).data('line');
+                    let ismobile = $(this).data('isMobile')
 
                     $.ajax({
                         url: url,
                         type: 'DELETE',
-                        data: { 
-                            _token: '{{ csrf_token() }}' ,
+                        data: {
+                            _token: '{{ csrf_token() }}',
                             CollectionNo: "{{ $SampleCollectionHeader->Sample_Collection_No }}"
                         },
                         success: function (res) {
                             if (res.return_value == true) {
+
+                                $('#card-' + record).attr("style", "display:none")
+
                                 $('#row-' + record).remove();
 
+
                                 // Close delete modal
-                                $('#deletepointmodal').addClass('hidden');
+                                $('.deletepointmodal').addClass('hidden');
                             }
                             if (res.return_value == false) {
                                 alert('Something Went Wrong');

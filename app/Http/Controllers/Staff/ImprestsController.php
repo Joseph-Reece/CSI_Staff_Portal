@@ -23,7 +23,7 @@ class ImprestsController extends Controller
     {
         $this->middleware('isAuth');
         $this->middleware('staff');
-        $this->middleware('isSignedIn');
+        // $this->middleware('isSignedIn');
     }
     //myUserId : Code[100];action : Text;DocNo : Code[50];department : Code[100];accountNo : Code[30];payingBankAccount : Code[30];purpose : Text;paymentReleaseDate : Date;payMode : Integer;responsibilityCenter : Code[30]
     public function index(){

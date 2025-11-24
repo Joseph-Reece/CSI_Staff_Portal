@@ -16,14 +16,19 @@
                     data-turbo-frame="_top" enctype="multipart/form-data"
                     onsubmit="return confirm('Are you sure you want to submit sample collection?');">
                     @csrf
+
+                    <input type="hidden" name="myAction" value="create">
+                    <input type="hidden" name="sample_collection_no"
+                        value="">
                     <x-form-group>
                         <x-slot name="label">Laboratory Client No</x-slot>
                         <x-slot name="value">
-                            <x-select name="client_no" id="client_no" class="tom-selects">
+                            <x-select name="client_no" id="client_no">
                                 <option value="">--select--</option>
                                 @foreach($LabClients as $client)
                                     <option value="{{ $client->Client_No }}" data-name="{{ $client->client_name }}">
-                                        {{ $client->Client_Name }}</option>
+                                        {{ $client->Client_Name }}
+                                    </option>
                                 @endforeach
                             </x-select>
                         </x-slot>
@@ -31,7 +36,7 @@
                     <x-form-group>
                         <x-slot name="label">Laboratory Client Name</x-slot>
                         <x-slot name="value">
-                            <x-input type="text" name="client_name" id="client_name" required />
+                            <x-input type="text" name="client_name" id="client_name" />
                         </x-slot>
                     </x-form-group>
 
@@ -83,7 +88,7 @@
                 @if($SampleCollections != null && count($SampleCollections) > 0)
                     @foreach($SampleCollections as $SampleCollection)
                         <x-table.tr isEven="{{$loop->even}}"
-                            onClick="location = '/staff/sampling/show/{{$SampleCollection->Sample_Collection_No}}'">
+                            onClick="location = '{{ route('sampling.show', $SampleCollection->Sample_Collection_No) }}'">
                             <x-table.td>{{$SampleCollection->Sample_Collection_No}}</x-table.td>
                             <x-table.td>{{$SampleCollection->Client_Name}}</x-table.td>
                             <x-table.td>{{$SampleCollection->Sampling_Date}}</x-table.td>
@@ -123,14 +128,7 @@
                     field: "text",
                     direction: "asc"
                 }
-            });
-            new TomSelect("#sample_code", {
-                create: true,
-                sortField: {
-                    field: "text",
-                    direction: "asc"
-                }
-            });  
+            }); 
         </script>
         <script>
             // function fetchClientName() {
@@ -144,6 +142,59 @@
                 $('#client_no').on('change', function () {
                     let clientName = $(this).find(':selected').data('name') || '';
                     $('#client_name').val(clientName);
+                });
+            });
+
+
+        </script>
+         <script>
+            $(document).ready(function () {
+                // Get the route with placeholder from Laravel
+                let sampleCodesUrl = @json(route('sampling.groupServices', ['type' => '__TYPE__']));
+
+                // Initialize TomSelect for Sample Code
+                var sampleCodeSelect = new TomSelect("#sample_code", {
+                    valueField: "Service_Code",
+                    labelField: "Service_Name",
+                    searchField: "Service_Name",
+                    placeholder: "Select Sample Code",
+                    load: function (query, callback) {
+                        var type = $("#sample_type").val();
+                        if (!type) return callback();
+
+                        // Replace placeholder with actual type
+                        let url = sampleCodesUrl.replace('__TYPE__', type);
+
+                        $.ajax({
+                            url: url,
+                            data: { q: query },
+                            dataType: "json",
+                            success: function (res) {
+                                callback(res);
+                            },
+                            error: function () {
+                                callback();
+                            }
+                        });
+                    }
+                });
+
+                // Auto-refresh sample codes when type changes
+                $("#sample_type").on("change", function () {
+                    sampleCodeSelect.clear();
+                    sampleCodeSelect.clearOptions();
+
+                    let type = $(this).val();
+                    if (type) {
+                        let url = sampleCodesUrl.replace('__TYPE__', type);
+                        $.ajax({
+                            url: url,
+                            dataType: "json",
+                            success: function (res) {
+                                sampleCodeSelect.addOptions(res);
+                            }
+                        });
+                    }
                 });
             });
 

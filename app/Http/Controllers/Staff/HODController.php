@@ -22,7 +22,7 @@ class HODController extends Controller
         $this->middleware('isAuth');
         $this->middleware('staff');
         $this->middleware('isHOD');
-        $this->middleware('isSignedIn');
+        // $this->middleware('isSignedIn');
     }
     public function staff(){
         $status = null;

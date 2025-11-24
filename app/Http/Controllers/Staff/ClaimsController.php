@@ -26,7 +26,7 @@ class ClaimsController extends Controller
     {
         $this->middleware('isAuth');
         $this->middleware('staff');
-        $this->middleware('isSignedIn');
+        // $this->middleware('isSignedIn');
     }
     public function index(){
         $requsitions = $this->odataClient()->from(ClaimHeader::wsName())

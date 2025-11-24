@@ -3,7 +3,7 @@
         <h3 class="text-lg font-bold">Sampling Points</h3>
 
         <!-- Add Sample Modal -->
-        <x-modal title="Add Sampling Point">
+        <x-modal title="Add Sampling Point" id="addSamplingpoint">
             <x-slot name="trigger">
                 <button type="button" @click="open = true"
                     class="px-2 py-1 text-sm rounded bg-green-500 text-white hover:bg-green-600">
@@ -68,18 +68,8 @@
                                 <div class="p-2 flex justify-between mt-4">
                                     @if ($SamplingPoint->Status == 'open')
                                         <!-- Edit Button -->
-                                        <button type="button"
-                                            class="flex items-center gap-2 px-3 py-1 text-sm rounded bg-blue-800 text-white hover:bg-blue-900">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                                stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M15.232 5.232l3.536 3.536M9 13l6-6 3 3-6 6H9v-3z" />
-                                            </svg>
-                                            Edit
-                                        </button>
-
                                         <!-- Delete Confirmation Modal -->
-                                        <x-modal title="Delete Sampling Point" id="deletepointmodal">
+                                        <x-modal title="Delete Sampling Point" class="deletepointmodal">
                                             <x-slot name="trigger">
                                                 <button type="button" @click="open = true"
                                                     class="flex items-center gap-2 px-3 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700">
@@ -101,8 +91,10 @@
                                                     class="px-3 py-1 rounded bg-gray-300 hover:bg-gray-400">
                                                     Cancel
                                                 </button>
-                                                <button type="button" id="deletesampling" data-url="{{ route('sampling.deletepoint', $SamplingPoint->Line_No) }}" data-line = "{{  $SamplingPoint->Line_No }}"
-                                                    class="flex items-center gap-2 px-3 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700">
+                                                <button type="button"
+                                                    data-url="{{ route('sampling.deletepoint', $SamplingPoint->Line_No) }}"
+                                                    data-line="{{  $SamplingPoint->Line_No }}"
+                                                    class="flex items-center gap-2 px-3 py-1 deletesampling text-sm rounded bg-red-600 text-white hover:bg-red-700">
                                                     Delete
                                                 </button>
                                             </div>
@@ -127,7 +119,7 @@
         <div class="md:hidden space-y-4 mt-4">
             @if($SamplingPoints != null && count($SamplingPoints) > 0)
                 @foreach($SamplingPoints as $SamplingPoint)
-                    <div class="bg-white shadow rounded-lg p-4 border">
+                    <div class="bg-white shadow rounded-lg p-4 border" id="card-{{ $SamplingPoint->Line_No }}">
                         <p><span class="font-bold">Point Name:</span> {{$SamplingPoint->Point_Name}}</p>
                         <p><span class="font-bold">Samples Collected:</span> {{$SamplingPoint->Samples_Collected}}
                         </p>
@@ -137,30 +129,10 @@
 
                         @if ($SamplingPoint->Status == 'open')
                             <div class="flex gap-2 mt-3">
-                                <!-- Edit -->
-                                <button type="button"
-                                    class="flex items-center gap-2 px-3 py-1 text-sm rounded bg-blue-800 text-white hover:bg-blue-900">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15.232 5.232l3.536 3.536M9 13l6-6 3 3-6 6H9v-3z" />
-                                    </svg>
-                                    Edit
-                                </button>
-
-                                <!-- Delete -->
-                                <!-- <button type="button"
-                                                                                                class="flex items-center gap-2 px-3 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700">
-                                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                                                                                    stroke="currentColor">
-                                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M4 7h16m-3-4H7m4 0h2" />
-                                                                                                </svg>
-                                                                                                Delete
-                                                                                            </button>
-                                                                                             -->
                                 <!-- Delete Confirmation Modal -->
-                                <x-modal title="Delete Sampling Point">
+
+                                <!-- Delete Confirmation Modal -->
+                                <x-modal title="Delete Sampling Point" class="deletepointmodalmobile">
                                     <x-slot name="trigger">
                                         <button type="button" @click="open = true"
                                             class="flex items-center gap-2 px-3 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700">
@@ -177,16 +149,18 @@
                                         <strong>{{ $SamplingPoint->Point_Name }}</strong>?
                                     </p>
 
-                                    <x-slot name="footer">
-                                        <form method="POST" action="{{ route('sampling.store', $SamplingPoint->id) }}">
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button type="submit" class="px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700">
-                                                Yes, Delete
-                                            </button>
-                                        </form>
-                                    </x-slot>
+                                    <div class="flex justify-end mt-4 gap-2">
+                                        <button @click="open = false" class="px-3 py-1 rounded bg-gray-300 hover:bg-gray-400">
+                                            Cancel
+                                        </button>
+                                        <button type="button" 
+                                            data-url="{{ route('sampling.deletepoint', $SamplingPoint->Line_No) }}"
+                                            data-line="{{  $SamplingPoint->Line_No }}"
+                                            data-isMobile="true"
+                                            class="flex items-center deletesampling gap-2 px-3 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700">
+                                            Delete
+                                        </button>
+                                    </div>
                                 </x-modal>
 
                             </div>
