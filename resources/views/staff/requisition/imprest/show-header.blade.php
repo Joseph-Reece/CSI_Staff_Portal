@@ -33,6 +33,12 @@
                         </x-grid-col>
                         <x-grid-col>
                             <x-show-group>
+                                <x-slot name="label">Travel Destination/Purpose</x-slot>
+                                <x-slot name="value">{{$requisition->Travel_Destination}}</x-slot>
+                            </x-show-group>
+                        </x-grid-col>
+                        <x-grid-col>
+                            <x-show-group>
                                 <x-slot name="label">Department</x-slot>
                                 <x-slot name="value">{{$requisition->Global_Dimension_1_Code}}</x-slot>
                             </x-show-group>

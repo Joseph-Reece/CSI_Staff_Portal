@@ -25,7 +25,7 @@ class TransportRequisitionsController extends Controller
     }
     public function index(){
         $requsitions = $this->odataClient()->from(TransportRequisition::wsName())
-        ->where('Requested_By',session('authUser')['userID'])
+        ->where('Employee_No',session('authUser')['employeeNo'])
         ->get();
         $data = [
             'requsitions' => $requsitions
@@ -84,11 +84,11 @@ class TransportRequisitionsController extends Controller
         }
     }
     public function show($reqNo){
-        $requisition = $this->odataClient()->from(TransportRequisition::wsName())->where('Transport_Requisition_No',$reqNo)->where('Requested_By',session('authUser')['userID'])->first();
+        $requisition = $this->odataClient()->from(TransportRequisition::wsName())->where('Code',$reqNo)->where('Employee_No',session('authUser')['employeeNo'])->first();
         if($requisition == null){
             return redirect()->back()->with('error','Requisition not found');
         }
-        $approvers = app('App\Http\Controllers\Staff\ApprovalsController')->getApprovers($requisition->No);
+        $approvers = app('App\Http\Controllers\Staff\ApprovalsController')->getApprovers($requisition->Code);
         $data = [
             'requisition' => $requisition,
             'approvers' => $approvers,

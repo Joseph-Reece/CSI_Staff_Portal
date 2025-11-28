@@ -10,13 +10,13 @@
                         <x-grid-col>
                             <x-show-group>
                                 <x-slot name="label">Requisition No</x-slot>
-                                <x-slot name="value">{{$requisition->Transport_Requisition_No}}</x-slot>
+                                <x-slot name="value">{{$requisition->Code}}</x-slot>
                             </x-show-group>
                         </x-grid-col>
                         <x-grid-col>
                             <x-show-group>
                                 <x-slot name="label">Destination</x-slot>
-                                <x-slot name="value">{{$requisition->Destination}}</x-slot>
+                                <x-slot name="value">{{$requisition->Trip_Destination}}</x-slot>
                             </x-show-group>
                         </x-grid-col>
                         <x-grid-col>
@@ -25,28 +25,28 @@
                                 <x-slot name="value">{{$requisition->No_of_Days_Requested}}</x-slot>
                             </x-show-group>
                         </x-grid-col>
-                        <x-grid-col>
+                        <!-- <x-grid-col>
                             <x-show-group>
                                 <x-slot name="label">No. of Passengers</x-slot>
                                 <x-slot name="value">{{$requisition->No_Of_Passangers}}</x-slot>
                             </x-show-group>
-                        </x-grid-col>
+                        </x-grid-col> -->
                         <x-grid-col>
                             <x-show-group>
-                                <x-slot name="label">Commencement</x-slot>
-                                <x-slot name="value">{{$requisition->Commencement}}</x-slot>
+                                <x-slot name="label">Trip Origin</x-slot>
+                                <x-slot name="value">{{$requisition->Trip_Origin}}</x-slot>
                             </x-show-group>
                         </x-grid-col>
                         <x-grid-col>
                             <x-show-group>
                                 <x-slot name="label">Purpose of the Trip</x-slot>
-                                <x-slot name="value">{{$requisition->Purpose_of_Trip}}</x-slot>
+                                <x-slot name="value">{{$requisition->Purpose_of_Request}}</x-slot>
                             </x-show-group>
                         </x-grid-col>
                         <x-grid-col>
                             <x-show-group>
                                 <x-slot name="label">Date of the Trip</x-slot>
-                                <x-slot name="value">{{$requisition->Date_of_Trip}}</x-slot>
+                                <x-slot name="value">{{$requisition->Trip_Date}}</x-slot>
                             </x-show-group>
                         </x-grid-col>
                         <x-grid-col>
@@ -58,13 +58,13 @@
                         <x-grid-col>
                             <x-show-group>
                                 <x-slot name="label">Date Requested</x-slot>
-                                <x-slot name="value">{{$requisition->Date_of_Request}}</x-slot>
+                                <x-slot name="value">{{$requisition->Requisition_Date}}</x-slot>
                             </x-show-group>
                         </x-grid-col>
                         <x-grid-col>
                             <x-show-group>
                                 <x-slot name="label">Requested By</x-slot>
-                                <x-slot name="value">{{$requisition->Requested_By}}</x-slot>
+                                <x-slot name="value">{{$requisition->Requester}}</x-slot>
                             </x-show-group>
                         </x-grid-col>
                         <x-grid-col>

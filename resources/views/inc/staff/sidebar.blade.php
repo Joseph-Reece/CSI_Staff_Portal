@@ -69,10 +69,10 @@
                     <x-heroicon-o-database/>
                     Store Requisition
                 </x-jet-dropdown-link>
-                {{-- <x-jet-dropdown-link href="/staff/requisition/transport" class="borderx-b border-l pl-1 flex items-center gap-1 {{\Request::is('*staff/requisition/transport*')? 'bg-theme2':''}}">
+                <x-jet-dropdown-link href="/staff/requisition/transport" class="borderx-b border-l pl-1 flex items-center gap-1 {{\Request::is('*staff/requisition/transport*')? 'bg-theme2':''}}">
                     <x-heroicon-o-truck/>
                     Transport Requisition
-                </x-jet-dropdown-link> --}}
+                </x-jet-dropdown-link>
             </div>
         </div>
         <!--Laboratory Services-->

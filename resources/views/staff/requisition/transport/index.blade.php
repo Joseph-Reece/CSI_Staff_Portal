@@ -9,17 +9,17 @@
                 <x-table.th>No.</x-table.th>
                 <x-table.th>Destination</x-table.th>
                 <x-table.th>No. of Days</x-table.th>
-                <x-table.th>No. of Passengers</x-table.th>
+                <!-- <x-table.th>No. of Passengers</x-table.th> -->
                 <x-table.th>Status</x-table.th>
             </x-slot>
             <x-slot name="tbody">
                 @if($requsitions != null && count($requsitions) > 0)
                     @foreach($requsitions as $requisition)
-                        <x-table.tr isEven="{{$loop->even}}" onClick="location = '/staff/requisition/transport/show/{{$requisition->Transport_Requisition_No}}'">
-                            <x-table.td>{{$requisition->Transport_Requisition_No}}</x-table.td>
-                            <x-table.td>{{$requisition->Destination}}</x-table.td>
+                        <x-table.tr isEven="{{$loop->even}}" onClick="location = '/staff/requisition/transport/show/{{$requisition->Code}}'">
+                            <x-table.td>{{$requisition->Code}}</x-table.td>
+                            <x-table.td>{{$requisition->Trip_Destination}}</x-table.td>
                             <x-table.td>{{$requisition->No_of_Days_Requested}}</x-table.td>
-                            <x-table.td>{{$requisition->No_Of_Passangers}}</x-table.td>
+                            <!-- <x-table.td>{{$requisition->No_Of_Passangers}}</x-table.td> -->
                             <x-table.td>
                                 @if ($requisition->Status == 'Open' || $requisition->Status == 'Pending Approval')
                                     <x-badge :class="'bg-blue-600'">{{$requisition->Status}}</x-badge>
