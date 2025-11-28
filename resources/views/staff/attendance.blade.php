@@ -33,7 +33,7 @@
                             <x-table.td>{{$record->Transaction_Date}}</x-table.td>
                             <x-table.td>{{$record->Full_Name}}</x-table.td>
                             <x-table.td>{{\Carbon\Carbon::parse(strtotime($record->Time_In))->format('H:i')}}</x-table.td>
-                            <x-table.td>{{\Carbon\Carbon::parse(strtotime($record->Time_out))->format('H:i')}}</x-table.td>
+                            <x-table.td>{{\Carbon\Carbon::parse(strtotime($record->Time_Out ))->format('H:i')}}</x-table.td>
                             <x-table.td>{{round($record->Hours_Worked,1)}}</x-table.td>
                             <x-table.td>{{$record->Location_Coordinates}}</x-table.td>
                             <x-table.td>

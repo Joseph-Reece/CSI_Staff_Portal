@@ -32,6 +32,7 @@ class AttendanceController extends Controller
         $data = [
             'records' => $records
         ];
+        // dd($data);
         return view('staff.attendance')->with($data);
     }
     public function checkInCheckoutToday(REQUEST $request){
@@ -49,9 +50,9 @@ class AttendanceController extends Controller
             $location = $request->checkoutLocation;
             $current_time = \Carbon\Carbon::parse(Time())->addHours(3)->format('H:i:s');
             $another_time = \Carbon\Carbon::parse(strtotime("17:00:00"))->format('H:i:s');
-            if ($current_time < $another_time) {
-                return redirect()->back()->with('error','You can only signout after 5:00 pm');
-            }
+            // if ($current_time < $another_time) {
+            //     return redirect()->back()->with('error','You can only signout after 5:00 pm');
+            // }
         }
         try{
             $service = $this->MySoapClient(config('app.cuStaffPortal'));
