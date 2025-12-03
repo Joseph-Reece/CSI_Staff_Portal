@@ -96,7 +96,7 @@
                                 <x-form-group>
                                     <x-slot name="label">Reliever</x-slot>
                                     <x-slot name="value">
-                                        <x-select name="reliever" id="reliever" class="tom-selects" placeholder="select">
+                                        <x-select name="reliever" id="reliever" placeholder="select">
                                             <option value=""></option>
                                             @if($relievers != null)
                                                 @foreach($relievers as $reliever)
